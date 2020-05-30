@@ -14,6 +14,8 @@ void Connection::handle_read(std::shared_ptr<Counter> &counter,
                              const boost::system::error_code &error,
                              size_t bytes_transferred) {
 
+  std::cerr << "Handle Read of connection\n";
+
   if (error && error != boost::asio::error::eof) {
     std::cerr << "Error: " << error.message() << "\n";
     return;
