@@ -22,7 +22,7 @@ public:
 
   tcp::socket &socket() { return socket_; }
 
-  void start(Counter &counter);
+  void start(std::shared_ptr<Counter> &counter);
 
 private:
   Connection(boost::asio::io_service &io_service) : socket_(io_service) {}
@@ -30,7 +30,8 @@ private:
   void handle_write(const boost::system::error_code & /*error*/,
                     size_t /*bytes_transferred*/) {}
 
-  void handle_read(Counter &counter, const boost::system::error_code &error,
+  void handle_read(std::shared_ptr<Counter> &counter,
+                   const boost::system::error_code &error,
                    size_t bytes_transferred);
 
   tcp::socket socket_;
@@ -39,9 +40,9 @@ private:
 
 class Server {
 public:
-  Server(boost::asio::io_service &io_service, int port, int duration)
+  Server(boost::asio::io_service &io_service, int port, int period)
       : acceptor_(io_service, tcp::endpoint(tcp::v4(), port)),
-        counter(duration) {
+        duration(period) {
     start_accept();
   }
 
@@ -59,11 +60,12 @@ private:
   void handle_accept(Connection::pointer new_connection,
                      const boost::system::error_code &error) {
     if (!error) {
-      new_connection->start(counter);
+      auto p = std::make_shared<Counter>(duration);
+      new_connection->start(p);
       start_accept();
     }
   }
 
   tcp::acceptor acceptor_;
-  Counter counter;
+  int duration;
 };

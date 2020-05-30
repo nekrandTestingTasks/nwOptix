@@ -10,7 +10,7 @@ bool checkInput(const std::string &str) {
   return std::all_of(str.begin() + start_pos, str.end() - 2, ::isdigit);
 }
 
-void Connection::handle_read(Counter &counter,
+void Connection::handle_read(std::shared_ptr<Counter> &counter,
                              const boost::system::error_code &error,
                              size_t bytes_transferred) {
 
@@ -36,21 +36,21 @@ void Connection::handle_read(Counter &counter,
   if (!checkInput(messageP)) {
     boost::asio::async_write(
         socket_, boost::asio::buffer("Incorrect input, ignoring it" + messageP),
-        boost::bind(&Connection::start, shared_from_this(), std::ref(counter)));
+        boost::bind(&Connection::start, shared_from_this(), counter));
     return;
   }
 
-  std::string message = counter.count(std::stoi(messageP));
+  std::string message = counter->count(std::stoi(messageP));
   boost::asio::async_write(
       socket_, boost::asio::buffer(message),
-      boost::bind(&Connection::start, shared_from_this(), std::ref(counter)));
+      boost::bind(&Connection::start, shared_from_this(), counter));
 }
 
-void Connection::start(Counter &counter) {
+void Connection::start(std::shared_ptr<Counter> &counter) {
 
   boost::asio::async_read_until(
       socket_, message_, "\r\n",
-      boost::bind(&Connection::handle_read, shared_from_this(),
-                  std::ref(counter), boost::asio::placeholders::error,
+      boost::bind(&Connection::handle_read, shared_from_this(), counter,
+                  boost::asio::placeholders::error,
                   boost::asio::placeholders::bytes_transferred));
 }
