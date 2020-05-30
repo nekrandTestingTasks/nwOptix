@@ -27,9 +27,6 @@ public:
 private:
   Connection(boost::asio::io_service &io_service) : socket_(io_service) {}
 
-  void handle_write(const boost::system::error_code & /*error*/,
-                    size_t /*bytes_transferred*/) {}
-
   void handle_read(std::shared_ptr<Counter> &counter,
                    const boost::system::error_code &error,
                    size_t bytes_transferred);

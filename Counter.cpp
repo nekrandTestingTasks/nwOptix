@@ -13,7 +13,6 @@ std::string Counter::count(int val) {
   counter += val;
   int cur_counter = counter;
   l.unlock();
-  std::cerr << std::to_string(cur_counter);
 
   return std::to_string(cur_counter) + "\r\n";
 }
