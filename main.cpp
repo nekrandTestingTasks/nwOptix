@@ -8,6 +8,7 @@ namespace po = boost::program_options;
 
 void parseCommandLineOptions(int ac, char *av[], int &port, int &timeout) {
   const int kTimeoutDefault = 60;
+  const int kPortDefault = 0;
 
   po::options_description desc("Allowed options");
   desc.add_options()("-d", po::value<int>(),
@@ -26,7 +27,7 @@ void parseCommandLineOptions(int ac, char *av[], int &port, int &timeout) {
   if (vm.count("-p")) {
     port = vm["-p"].as<int>();
   } else {
-    port = -1;
+    port = kPortDefault;
   }
 }
 
