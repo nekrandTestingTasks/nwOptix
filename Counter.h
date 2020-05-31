@@ -11,7 +11,7 @@ struct Request {
 
 class Counter {
 public:
-  Counter(int p) : period(p), counter(0) { };
+  explicit Counter(int p) : period(p), counter(0){};
 
   std::string count(int val);
 
