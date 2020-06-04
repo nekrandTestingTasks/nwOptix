@@ -18,6 +18,6 @@ public:
 private:
   std::queue<Request> requests;
   std::mutex m;
-  int counter;
   int period;
+  int counter;
 };

@@ -9,3 +9,5 @@ find_package(Boost REQUIRED COMPONENTS system program_options)
 
 include_directories(${Boost_INCLUDE_DIR})
 target_link_libraries(nwOptixTest ${Boost_LIBRARIES})
+
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
