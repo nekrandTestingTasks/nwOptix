@@ -34,12 +34,12 @@ private:
                    const boost::system::error_code &error,
                    size_t bytes_transferred);
 
-    void handle_read1(
-                     const boost::system::error_code &error,
-                     size_t bytes_transferred) {};
+  void handle_read1(const boost::system::error_code &error,
+                    size_t bytes_transferred){};
 
   tcp::socket socket_;
   boost::asio::streambuf message_;
+  const std::string kDelimeter = "\r\n";
 };
 
 class Server {
